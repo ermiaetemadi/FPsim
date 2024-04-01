@@ -1,0 +1,10 @@
+Useful Potentials:
+
+    OU: f = r -> -a*r   
+    Mexican Hat: f = r -> 2*r-0.36(r'r)*r   (has a radial double well)
+
+#TODO: Check if you can use DiffrentialEquations.jl instead of custom integrators
+
+#TODO: Too much Tuple()
+
+#TODO: Need documentations
