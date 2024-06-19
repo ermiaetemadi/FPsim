@@ -7,8 +7,8 @@ struct Grid
     Grid(dim, x_c, Δx, N) = new(dim, x_c, Δx, N, Tuple([N^i for i in 0:(dim-1)]))
 end
 
-get_pos(g::Grid, ijk::CartesianIndex) = g.Δx*collect(Tuple(ijk)).*ones(g.dim) + g.x_c
-get_ijk(g::Grid, pos::AbstractArray{Float64}) = CartesianIndex((floor.(Int64, (pos - g.x_c)./g.Δx))...)
+get_pos(g::Grid, ijk::CartesianIndex) = g.Δx*(collect(Tuple(ijk)).-1) + g.x_c
+get_ijk(g::Grid, pos::AbstractArray{Float64}) = CartesianIndex((ceil.(Int64, (pos - g.x_c)./g.Δx))...)
 ijk_to_ind(g::Grid, ijk::CartesianIndex) = sum((Tuple(ijk) .- 1).*g.CartSteps) + 1
 
 
@@ -19,7 +19,7 @@ function find_bins(En::AbstractEnsemble, g::Grid, t_n::Int64)   # Places particl
 
     for (id, pos) in enumerate(eachcol(data))
         ijk = get_ijk(g, pos)
-        if all(r -> r>=0, ijk.I)    # We ignore particles outside the grid
+        if all(r -> r>0, ijk.I)    # We ignore particles outside the grid
             append!(get!(bin_dict, ijk.I, Vector{Int64}[]), id)    # Appends particle's "id" to the "ijk" bin
         end
     end
