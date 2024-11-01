@@ -26,7 +26,10 @@ function KM2_estimate(En::AbstractEnsemble, g::Grid, t_n::Int64, τ_n::Int64)
         vec_final = eachcol(En.paths[:, t_n + τ_n, particles_id])
 
         K1 = mean(vec_final - vec_initial)
-        K2 = mean(cov_mat.(map(v-> v - K1, vec_final - vec_initial)))
+        K2 = mean(cov_mat.(vec_final - vec_initial))
+
+        # The version below uses K1 to remove the mean
+        # K2 = mean(cov_mat.(map(v-> v - K1, vec_final - vec_initial)))
 
         D1_vec[:, ind] = K1 / Δτ
         D2_mat[:, :, ind] = K2 / (2*Δτ)
